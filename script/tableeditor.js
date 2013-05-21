@@ -13,15 +13,17 @@
  * @author Adrian Lang <lang@cosmocode.de>
  */
 
-addInitEvent(function () {
-    var table = getElementsByClass('edit', document, 'table')[0];
+jQuery(function () {
+   
+    var table = jQuery('table.edit')[0];
     if (!table) {
         // There is no table editor.
         return;
     }
     initSizeCtl('size__ctl','edit__wrap');
-    var tbody = table.getElementsByTagName('tbody')[0];
-    prependChild(table, document.createElement('thead'));
+   
+    var tbody = $(table).find('tbody')[0];
+    $(table).prepend('<thead></thead>');
 
     // The currently selected table field
     var cur_field = null;
