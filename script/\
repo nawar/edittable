@@ -64,6 +64,23 @@ jQuery(function () {
      * @author Benutzer:D <http://de.wikipedia.org/wiki/Benutzer:D/monobook/api.js>
      */
 
+    
+    /** adds a class to an element */
+    /*
+    function removeClass(element, className) {
+        var re  = classNameRE(className);
+        var old = element.className ? element.className : "";
+        element.className = old.replace(re, " ");
+    }
+
+    function updateClass(element, className, active) {
+        var has = hasClass(element, className);
+        if (has === active) return;
+        if (active) addClass(element, className);
+        else        removeClass(element, className);
+    }
+    */
+
     function map(arr, func) {
         for (var index in arr) {
             if (arr.hasOwnProperty(index)) {
@@ -535,7 +552,7 @@ jQuery(function () {
             var aligns = ['left', 'right', 'center'];
             var obj = lastChildElement.call(this);
             for (var align in aligns) {
-		    jQuery(obj).toggleClass( aligns[align] + 'align',  nualign === aligns[align] );
+                jQuery(obj, ).updateClass(aligns[align] + 'align', nualign === aligns[align]);
             }
         };
 
@@ -773,8 +790,8 @@ jQuery(function () {
         button.update = function () {
             if (!cur_field) return;
             var state = update_handler.call(this);
-	    jQuery(this).toggleClass('selected',state[0]);
-	    jQuery(this).toggleClass('disabled',state[1]);
+            updateClass(this, 'selected', state[0]);
+            updateClass(this, 'disabled', state[1]);
             this.disabled = state[1];
         };
         setCurrentField._handlers.push(function () {button.update.call(button); });
@@ -1106,7 +1123,7 @@ jQuery(function () {
         if (jQuery(handle).hasClass('nullhandle')) {
             return;
         }
-	jQuery(handle).toggle('disabledhandle',!checkSpans(handle, false));
+        updateClass(handle, 'disabledhandle', !checkSpans(handle, false));
     }
 
     var handles_done = false;
@@ -1187,10 +1204,10 @@ jQuery(function () {
         }
 
         // Hide all dropdowns
-	jQuery('span.handle_dropdown').each(function() {
-		$(this).children().last().hide();
-		
-	});
+        var dropdowns = getElementsByClass('handle_dropdown', $('dw__editform'), 'span');
+        for (var drop = 0 ; drop < dropdowns.length ; ++drop) {
+            dropdowns[drop].lastChild.style.display = 'none';
+        }
 
         if (show) {
             tgt.lastChild.style.display = '';
@@ -1213,9 +1230,10 @@ jQuery(function () {
     handles_done = true;
 
     function updateHandlesState () {
-	    jQuery('td.handle').each( function() {
-		    updateHandleState(this);
-	    });
+        var handles = getElementsByClass('handle', table, 'td');
+        for (var handle = 0 ; handle < handles.length ; ++handle) {
+            updateHandleState(handles[handle]);
+        }
     }
 
     var buttons = $('tool__bar').getElementsByTagName('button');
@@ -1228,7 +1246,7 @@ jQuery(function () {
     setCurrentField._handlers.push(function () {
         var handles = getElementsByClass('handle', table, 'td');
         for (var handle = 0 ; handle < handles.length ; ++handle) {
-	    jQuery(handles[handle]).removeClass('curhandle');
+            removeClass(handles[handle], 'curhandle');
         }
         var rowhandle = firstChildElement.call(this.parentNode);
         if (assertType.call(rowhandle, TYPE__ELEMENT)) {
